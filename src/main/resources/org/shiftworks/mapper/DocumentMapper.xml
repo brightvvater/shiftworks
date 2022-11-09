@@ -50,14 +50,14 @@
 	<!--스크랩 게시물 리스트 조회-->
 	<select id="getScrapList" resultType="org.shiftworks.domain.ScrapVO">
 		<![CDATA[
-			select scrap_id,dept_id,emp_id,post_id,scrap_date,post_name,post_content,
-			post_regdate, name
+			select scrap_id,dept_id,emp_id,post_id,scrap_date,post_name, post_regdate,scrap_date
 			from
 				( select /*+INDEX_DESC(s scrap_pk) */
-				  rownum rn, scrap_id,e.dept_id as dept_id,e.emp_id as emp_id,post_id,scrap_date,post_name,
-				  post_content, post_regdate,e.name as name
-				from scrap s JOIN employee e
-				ON e.emp_id =s.emp_id 
+				  rownum rn,s.scrap_id as scrap_id, s.post_id as post_id, p.emp_id as emp_id, 
+					  p.dept_id as dept_id, s.post_name as post_name, s.post_regdate as post_regdate, 
+					  scrap_date
+				from scrap s JOIN post p
+				ON s.post_id = p.post_id 
 				where
 		]]>
 			
@@ -66,10 +66,10 @@
 				<trim prefix="OR">
 					<choose>
 						<when test="type =='T'.toString()">
-							post_name like '%'||#{keyword}||'%'
+							s.post_name like '%'||#{keyword}||'%'
 						</when>
 						<when test="type =='C'.toString()">
-							 post_content like '%'||#{keyword}||'%'
+							 s.post_content like '%'||#{keyword}||'%'
 						</when>
 					</choose>
 				</trim>
@@ -78,7 +78,7 @@
 				
 		<![CDATA[		
 				rownum <=#{pageNum}*#{amount}
-				and e.emp_id =#{emp_id}
+				and s.emp_id =#{emp_id}
 				)
 			where rn >(#{pageNum}-1)*#{amount}
 		]]>
@@ -87,45 +87,18 @@
 	
 	<!--스크랩 게시물 상세보기 -->
 	<select id="getScrap" resultType="org.shiftworks.domain.ScrapVO">
-		select * from Scrap where emp_id= #{emp_id} and post_id = #{post_id}
+		select * from Scrap where post_id = #{post_id}
 	</select>
 	
 	<!--부서문서함 리스트 조회-->
 	<select id="deptSelectList" parameterType="String" resultType="org.shiftworks.domain.PostVO">
 		<![CDATA[
-			select post_id, b_id, dept_id, post_name, post_content, emp_id,
-				post_regno, post_regdate, post_updatedate, post_fix, post_receivedept, name
-			from
-				( select /*+INDEX_DESC(p post_pk) */
-				  rownum rn, p.post_id as post_id, b_id, p.dept_id as dept_id, post_name, post_content, p.emp_id as emp_id,
-				  post_regno, post_regdate, post_updatedate, post_fix, post_receivedept, e.name as name
-				from post p JOIN employee e
-				ON e.emp_id =p.emp_id 
-				where
-		]]>
-			
-		 <trim prefix="(" suffix=") AND" prefixOverrides="OR">
-			<foreach item='type' collection="typeArr" >
-				<trim prefix="OR">
-					<choose>
-						<when test="type =='T'.toString()">
-							post_name like '%'||#{keyword}||'%'
-						</when>
-						<when test="type =='C'.toString()">
-							 post_content like '%'||#{keyword}||'%'
-						</when>
-					</choose>
-				</trim>
-			</foreach>
-	</trim> 
-				
-		<![CDATA[		
-				rownum <=#{pageNum}*#{amount}
-				and e.emp_id =#{emp_id}
-				and post_receivedept = #{dept_id}
-				
-				)
-			where rn >(#{pageNum}-1)*#{amount}
+			select distinct p2.post_id as post_id, p2.b_id as b_id, p2.emp_id as emp_id, p2.dept_id as dept_id, p2.post_name as post_name, p2.post_content as post_content, p2.post_regdate as post_regdate,
+				p2.post_receivedept as post_receivedept
+				from post p1 join post p2
+				on p1.dept_id = p2.post_receivedept
+				where p1.emp_id =#{emp_id}
+	
 		]]>
 		
 	</select> 
@@ -196,7 +169,7 @@
 	
 	<!--결재가 완료된 총 글 개수-->
 	<select id="getTotalApproval" resultType="int">
-		select count(*) from approval where and apr_status ='1' OR apr_status='2'
+		select count(*) from approval where apr_status ='1' OR apr_status='2'
 	</select>
 	
 	<!-- 부서 찾기-->

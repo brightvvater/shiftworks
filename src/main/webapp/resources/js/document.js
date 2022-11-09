@@ -13,10 +13,30 @@ var documentService = (function(){
 	            
 	          }
 	        }).fail(function(xhr, status, err) {
-	      if (error) {
-	        error();
-	      }
-	    });
+	      		if (error) {
+	       		 error();
+	      		}
+	    	});
+	  
+	  }
+	  
+	  
+	  
+	  //deptDoc 게시물 리스트 받아오기
+	function getDeptList(param, callback, error) {
+
+	    $.getJSON("/document/deptDoc/" + param.pageNum + "/" + param.type +"/"+param.keyword +".json",
+	        function(data) {
+	    	
+	          if (callback) {
+	            callback(data);
+	            
+	          }
+	        }).fail(function(xhr, status, err) {
+	      		if (error) {
+	       		 error();
+	      		}
+	    	});
 	  
 	  }
 	  
@@ -64,7 +84,8 @@ var documentService = (function(){
 	  return{
 	  getList:getList,
 	  getApprovalList:getApprovalList,
-	  getScrapList:getScrapList
+	  getScrapList:getScrapList,
+	  getDeptList:getDeptList
 	  }
 
 

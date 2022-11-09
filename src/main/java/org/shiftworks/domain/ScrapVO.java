@@ -19,5 +19,4 @@ public class ScrapVO {
 	private String post_content;
 	private String post_regdate;
 	private List<FileVO> fileList;
-
 }

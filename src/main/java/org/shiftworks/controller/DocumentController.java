@@ -23,13 +23,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
 
-@Controller
+@RestController
 @Log4j
 @AllArgsConstructor
 @RequestMapping("/document/*")
@@ -39,7 +40,6 @@ public class DocumentController {
 	
 
 	//내가쓴 게시물 list
-	@ResponseBody
 	@GetMapping(value = "/myDoc/{pageNum}")
 	@PreAuthorize("isAuthenticated()")
 	public ModelAndView getMyDocumentListWithPaging(@PathVariable("pageNum")int pageNum, Authentication auth){
@@ -63,7 +63,6 @@ public class DocumentController {
 	}
 	
 		//게시물 list ajax
-		@ResponseBody
 		@GetMapping(value = "/myDoc/{pageNum}/{type}/{keyword}")
 		public ResponseEntity<DocumentPageDTO> MyDocumentListWithPaging(@PathVariable("pageNum")int pageNum,
 																				@PathVariable("type") String type,
@@ -96,7 +95,6 @@ public class DocumentController {
 	
 	
 	//내가 쓴 게시물 상세보기 
-	@ResponseBody
 	@GetMapping(value = "/detail")
 	@PreAuthorize("isAuthenticated()")
 	public ModelAndView getMyDocument(@RequestParam("post_id")int post_id, Authentication auth){
@@ -122,13 +120,11 @@ public class DocumentController {
 	
 	
 	//스크랩한 게시물 리스트 보기
-	@ResponseBody
 	@GetMapping(value = "/scrap/{pageNum}")
 	@PreAuthorize("isAuthenticated()")
 	public ModelAndView getScrapList(@PathVariable("pageNum")int pageNum, Authentication auth){
 		
 		//log.info("scraplist.........");
-		
 		//로그인한 사람만 접근 가능
 		UserDetails ud = (UserDetails)auth.getPrincipal();
 		//log.info(ud.getUsername());
@@ -148,7 +144,6 @@ public class DocumentController {
 	
 	
 	//스크랩 list ajax
-	@ResponseBody
 	@GetMapping(value = "/scrap/{pageNum}/{type}/{keyword}")
 	public ResponseEntity<ScrapDTO> ScrapListWithPaging(@PathVariable("pageNum")int pageNum,
 																			@PathVariable("type") String type,
@@ -156,14 +151,17 @@ public class DocumentController {
 																			Authentication auth){
 				
 		//log.info("scraplist.........");
-				
 		//로그인한 사람만 접근 가능
 		UserDetails ud = (UserDetails)auth.getPrincipal();
 		//log.info(ud.getUsername());
-		String emp_id = ud.getUsername();
+		String emp_id = ud.getUsername();		
+		
 				
 		DocumentCriteria cri = new DocumentCriteria();
 		cri.setPageNum(pageNum);
+		cri.setEmp_id(emp_id);
+		
+		
 		if(type.equals("empty")) {
 			type = null;
 		}
@@ -172,28 +170,21 @@ public class DocumentController {
 		}
 		cri.setType(type);
 		cri.setKeyword(keyword);
-		cri.setEmp_id(emp_id);
-				
+		
 		return new ResponseEntity <ScrapDTO>(service.getScrapListWithPaging(cri),HttpStatus.OK);
 	}
 	
 	
 	//스크랩 상세보기
-	@ResponseBody
 	@GetMapping(value = "/scrapDetail")
 	@PreAuthorize("isAuthenticated()")
 	public ModelAndView getScrap(@RequestParam("post_id")int post_id, Authentication auth){
 		
 		//log.info("scrap........");
 		
-		//로그인한 사람만 접근 가능
-		UserDetails ud = (UserDetails)auth.getPrincipal();
-		//log.info(ud.getUsername());
-		String emp_id = ud.getUsername();
 		
 		ScrapVO vo = new ScrapVO();
 		vo.setPost_id(post_id);
-		vo.setEmp_id(emp_id); 
 		
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("/document/DOC_scrap");
@@ -204,7 +195,6 @@ public class DocumentController {
 	}
 	
 	//부서수신함 조회
-	@ResponseBody
 	@GetMapping(value = "/deptDoc/{pageNum}")
 	@PreAuthorize("isAuthenticated()")
 	public ModelAndView getDeptDocList(
@@ -231,8 +221,38 @@ public class DocumentController {
 	}
 	
 	
+	//게시물 list ajax
+	@GetMapping(value = "/deptDoc/{pageNum}/{type}/{keyword}")
+	public ResponseEntity<DocumentPageDTO> deptDocListWithPaging(
+																			@PathVariable("pageNum")int pageNum,
+																			@PathVariable("type") String type,
+																			@PathVariable("keyword")String keyword,
+																			Authentication auth){
+				
+
+				
+		//로그인한 사람만 접근 가능
+		UserDetails ud = (UserDetails)auth.getPrincipal();
+		//log.info(ud.getUsername());
+		String emp_id = ud.getUsername();
+				
+		DocumentCriteria cri = new DocumentCriteria();
+		cri.setPageNum(pageNum);
+		if(type.equals("empty")) {
+			type = null;
+		}
+		if(keyword.equals("empty")) {
+			keyword = null;
+		}
+		cri.setType(type);
+		cri.setKeyword(keyword);
+		cri.setEmp_id(emp_id);
+				
+		return new ResponseEntity <DocumentPageDTO>(service.deptSelectList(cri),HttpStatus.OK);
+	}
+	
+	
 	//부서수신함 상세보기
-	@ResponseBody
 	@GetMapping(value = "/deptDocDetail")
 	@PreAuthorize("isAuthenticated()")
 	public ModelAndView getDeptDoc(@RequestParam("post_id")int post_id, Authentication auth){
@@ -258,7 +278,6 @@ public class DocumentController {
 	}
 	
 	//결재문서함 list
-		@ResponseBody
 		@GetMapping(value = "/myApproval/{pageNum}")
 		@PreAuthorize("isAuthenticated()")
 		public ModelAndView getMyApprovalListWithPaging(@PathVariable("pageNum")int pageNum, Authentication auth){
@@ -281,7 +300,6 @@ public class DocumentController {
 		}
 		
 		//결재문서함 list ajax
-		@ResponseBody
 		@GetMapping(value = "/myApproval/{pageNum}/{type}/{keyword}")
 		public ResponseEntity<ApprovalListDTO> MyApprovalListWithPaging(@PathVariable("pageNum")int pageNum,
 																			@PathVariable("type") String type,
@@ -313,7 +331,6 @@ public class DocumentController {
 		
 		
 		//결재문서함 상세보기
-		@ResponseBody
 		@GetMapping(value = "/approvalDetail")
 		@PreAuthorize("isAuthenticated()")
 		public ModelAndView getMyApproval(@RequestParam("apr_id")int apr_id, Authentication auth){

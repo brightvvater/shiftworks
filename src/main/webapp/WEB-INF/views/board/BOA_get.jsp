@@ -79,6 +79,9 @@
 					<label>수정일</label> 
 					<input class="form-control" name='post_updatedate' value='<c:out value="${post.post_updatedate}"/>' readonly="readonly">
 				</div>
+				<div class="form-group">
+					<input class="form-control" name='emp_id' value='<c:out value="${post.emp_id }"/>' hidden="hidden">
+				</div>
 				<!--첨부파일-->
 				<div class="mb-3">
 					<label for="formFileSm" class="form-label file">첨부파일</label>
@@ -182,7 +185,7 @@
 						var post_name = $(".panel-body").find("input[name='post_name']").val();
 						var post_content = $(".panel-body").find("textarea[name='post_content']").val();
 						var post_regdate = $(".panel-body").find("input[name='post_regdate']").val();
-
+						var emp_id =  $(".panel-body").find("input[name='emp_id']").val();
 					
 						
 						//csrf_token 가져오기
@@ -245,6 +248,7 @@
 								post_name : post_name,
 								post_content : post_content,
 								post_regdate:post_regdate,
+								emp_id: emp_id,
 								csrf_token:csrf_token,
 					            csrf_header:csrf_header
 							}

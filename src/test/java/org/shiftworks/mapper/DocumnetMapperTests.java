@@ -61,20 +61,18 @@ public class DocumnetMapperTests {
 //		
 //	}
 	
-//	@Test
-//	public void testDeptSelectList() {
-//		String dept_id = "dept1";
-//		String emp_id = "ul";
-//	
-//		DocumentCriteria cri = new DocumentCriteria();
-//		cri.setDept_id(dept_id);
-//		cri.setEmp_id(emp_id);
-//		cri.setAmount(10);
-//		cri.setPageNum(1);
-//	
-//		
-//		mapper.deptSelectList(cri).forEach(post -> log.info(post));
-//	}
+	@Test
+	public void testDeptSelectList() {
+		String emp_id = "user1";
+	
+		DocumentCriteria cri = new DocumentCriteria();
+		cri.setEmp_id(emp_id);
+		//cri.setAmount(10);
+		//cri.setPageNum(1);
+	
+		
+		mapper.deptSelectList(cri).forEach(post -> log.info(post));
+	}
 	
 //	@Test
 //	public void testDeptSelect() {

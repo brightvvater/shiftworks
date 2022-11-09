@@ -75,7 +75,7 @@
 								<td><a class="getDeptDoc" href='<c:out value="${post.post_id}"/>'>
 									<c:out value="${post.post_id}" /></a>
 								</td>
-								<td><c:out value="${post.name}" /></td>
+								<td><c:out value="${post.emp_id}" /></td>
 								<td><c:out value="${post.dept_id}" /></td>
 								<td><c:out value="${post.post_name}" /></td>
 								<td><c:out value="${post.post_regdate}" /></td>
@@ -162,19 +162,19 @@ $(document).ready(function () {
 						type: type 
 				}
 				
-				console.log(keyword);
-				console.log(type);
+				//console.log(keyword);
+				//console.log(type);
 				
 				
 				
-				 documentService.getList(Criteria, function(result){
-					console.log(result); 
+				 documentService.getDeptList(Criteria, function(result){
+					//console.log(result); 
 					
 					$("#main").html('');
 					var list = result.list;
 					var str ="";
 					for(var i=0;i<list.length;i++){
-						console.log(list[i]);
+						//console.log(list[i]);
 						
 						str += "<tr>";
 						str +="<td><a class='getMyDoc' href='"+list[i].post_id+"'>"+list[i].post_id+"</td>";
@@ -193,7 +193,7 @@ $(document).ready(function () {
 		//pagination
 	  $(".paginate_button a").on("click", function(e) {
 					e.preventDefault();
-					console.log($(this).attr("href"));   
+					//console.log($(this).attr("href"));   
 					var actionForm = $("#actionForm");
 					
 					var pageNum = actionForm.find("input[name='pageNum']").val($(this).attr("href"));
@@ -207,12 +207,12 @@ $(document).ready(function () {
 							type: type ||"empty"
 					}
 					
-					 console.log('click');
+					// console.log('click');
 					
 				
 					
 				//pageNum, keyword, type을 들고 controller로 가서 result 값 가져오기
-				 documentService.getList(Criteria, function(result){
+				 documentService.getDeptList(Criteria, function(result){
 					console.log(result); 
 					
 					
@@ -220,7 +220,7 @@ $(document).ready(function () {
 					var list = result.list;
 					var str ="";
 					for(var i=0;i<list.length;i++){
-						console.log(list[i]);
+						//console.log(list[i]);
 						
 						str += "<tr>";
 						str +="<td><a class='getMyDoc' href='"+list[i].post_id+"'>"+list[i].post_id+"</td>";

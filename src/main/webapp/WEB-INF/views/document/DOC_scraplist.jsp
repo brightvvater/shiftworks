@@ -183,7 +183,7 @@ $(document).ready(function () {
 						str +="<td>"+list[i].dept_id+"</td>";
 						str +="<td>"+list[i].post_name+"</td>";
 						str +="<td>"+list[i].post_regdate+"</td>";
-						str +="<td>"+list[i].post_updatedate+"</td>";
+						str +="<td>"+list[i].scrap_date+"</td>";
 						str +="</tr>";
 					}
 					$("#main").html(str);
