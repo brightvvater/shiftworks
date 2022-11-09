@@ -279,10 +279,10 @@ $(document).ready(function () {
 				list.push("${post.b_id}");
 			</c:forEach>
 		
-			//console.log(list[1]);
+			console.log(list[1]);
 			
 			searchForm.find("input[name='pageNum']").val("1");
-			searchForm.find("input[name='b_id']").val(list[1]);
+			searchForm.find("input[name='b_id']").val(list[0]);
 			searchForm.submit();
 	  });
 		

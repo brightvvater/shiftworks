@@ -23,7 +23,7 @@
 			select post_id, b_id, dept_id, post_name, post_content, emp_id,
 				post_regno, post_regdate, post_updatedate, post_fix, post_receivedept, name
 			from
-				( select /*+INDEX_DESC(post post_pk) */
+				( select /*+INDEX_DESC(p post_pk) */
 				  rownum rn, p.post_id as post_id, b_id, p.dept_id as dept_id, post_name, post_content, p.emp_id as emp_id,
 				  post_regno, post_regdate, post_updatedate, post_fix, post_receivedept, e.name as name
 				from post p JOIN employee e
@@ -49,9 +49,9 @@
 		<![CDATA[		
 				rownum <=#{pageNum}*#{amount}
 				AND b_id =#{b_id}
+				
 				)
 			where rn >(#{pageNum}-1)*#{amount}
-			order by post_id desc
 			
 		]]>
 		
