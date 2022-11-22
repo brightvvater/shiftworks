@@ -32,39 +32,28 @@ public class HomeController {
 	
 	private BookingService bookingService;
 	private ApprovalService appService;
-	/**
-	 * Simply selects the home view to render by returning its name.
-	 */
-//	@RequestMapping(value = "/", method = RequestMethod.GET)
-//	public String home(Locale locale, Model model) {
-//		logger.info("Welcome home! The client locale is {}.", locale);
-//		
-//		Date date = new Date();
-//		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-//		
-//		String formattedDate = dateFormat.format(date);
-//		
-//		model.addAttribute("serverTime", formattedDate );
-//		
-//		return "home";
-//	}
+
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String homeContent(Model model) {
 		List<BookingVO> eventList = new ArrayList<BookingVO>();
 		List<BookingVO> list = bookingService.getList();
 
-		for(int i=0;i<5;i++) {
-			
-			eventList.add(list.get(i));
 		
+		if(list == null) {
+			return "예약이 없습니다";
+		}else {
+			for(int i=0;i<list.size();i++) {
+				eventList.add(list.get(i));
+			}
 		}
+		
 		
 		//예약 리스트(게시판 형태)
 		//model.addAttribute("event", bookingService.getList());
 		model.addAttribute("event", eventList);
 		
-		model.addAttribute("get", bookingService.getBooking(205));
+		//model.addAttribute("get", bookingService.getBooking(205));
 		//model.addAttribute("event2", sservice.getList());
 		
 		//model.addAttribute("board", service.boardList());
