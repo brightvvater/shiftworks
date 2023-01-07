@@ -1,5 +1,5 @@
 💻 Shiftworks (2022)
-KOSTA FINAL PROJECT - 1차 / 📄 포트폴리오
+KOSTA FINAL PROJECT - 1차
 
 참여인원: 6명
 프로젝트 기간: 221024 - 221110(3주)
